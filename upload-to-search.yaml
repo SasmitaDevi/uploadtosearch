@@ -12,6 +12,20 @@ Resources:
         S3Key: aws_auth.zip
       CompatibleRuntimes:
         - python3.12
+  PdftotxtS3:
+    Type: AWS::S3::Bucket
+    DependsOn: ExampleInvokePermission
+    Properties:
+      BucketName: txtbucketstage2
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:Put
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: txt
+            Function: !GetAtt [ uploadtosearch, Arn]
   ExampleInvokePermission:
     Type: AWS::Lambda::Permission
     DependsOn: uploadtosearch
