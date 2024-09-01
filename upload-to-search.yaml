@@ -12,6 +12,18 @@ Resources:
         S3Key: aws_auth.zip
       CompatibleRuntimes:
         - python3.12
+  ExampleInvokePermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: uploadtosearch
+    Properties:
+      FunctionName:
+        Fn::GetAtt:
+          - uploadtosearch
+          - Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceArn:
+        Fn::Sub: arn:aws:s3:::txtbucketstage2  
   uploadtosearch:
     Type: 'AWS::Serverless::Function'
     Properties:
